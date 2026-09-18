@@ -1,0 +1,14 @@
+// Copyright 2026 AstraCodec 项目作者，遵循项目 LICENSE。
+#ifndef ASTRACODEC_CORE_BASE_BUILD_INFO_H_
+#define ASTRACODEC_CORE_BASE_BUILD_INFO_H_
+
+namespace astra::build {
+inline constexpr char kProjectVersion[] = "@PROJECT_VERSION@";
+inline constexpr char kGitCommit[] = "@ASTRA_GIT_COMMIT@";
+inline constexpr char kGitDirty[] = "@ASTRA_GIT_DIRTY@";
+inline constexpr char kCompiler[] = "@ASTRA_COMPILER@";
+inline constexpr char kPlatform[] = "@ASTRA_PLATFORM@";
+inline constexpr char kCpuArchitecture[] = "@ASTRA_CPU_ARCHITECTURE@";
+}  // namespace astra::build
+
+#endif  // ASTRACODEC_CORE_BASE_BUILD_INFO_H_

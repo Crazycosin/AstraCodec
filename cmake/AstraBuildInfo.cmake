@@ -1,0 +1,21 @@
+find_package(Git REQUIRED)
+execute_process(COMMAND "${GIT_EXECUTABLE}" rev-parse HEAD
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+  OUTPUT_VARIABLE ASTRA_GIT_COMMIT OUTPUT_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
+)
+execute_process(COMMAND "${GIT_EXECUTABLE}" status --porcelain --untracked-files=normal
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+  OUTPUT_VARIABLE astra_git_status OUTPUT_STRIP_TRAILING_WHITESPACE
+  COMMAND_ERROR_IS_FATAL ANY
+)
+if(astra_git_status STREQUAL "")
+  set(ASTRA_GIT_DIRTY "false")
+else()
+  set(ASTRA_GIT_DIRTY "true")
+endif()
+set(ASTRA_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+set(ASTRA_PLATFORM "${CMAKE_SYSTEM_NAME}")
+set(ASTRA_CPU_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
+configure_file("${CMAKE_SOURCE_DIR}/cmake/build_info.h.in"
+  "${CMAKE_BINARY_DIR}/generated/core/base/build_info.h" @ONLY)

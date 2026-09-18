@@ -1,0 +1,23 @@
+execute_process(COMMAND "${ASTRA_PROGRAM}" "--${ASTRA_MODE}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE diagnostic
+  TIMEOUT 10
+)
+if(NOT result STREQUAL "0")
+  message(FATAL_ERROR "CLI 失败：${result}\n${diagnostic}")
+endif()
+if(ASTRA_MODE STREQUAL "version")
+  foreach(field IN ITEMS AstraCodec git_commit git_dirty compiler platform cpu_architecture cpu_logical_cores ffmpeg libavformat libavcodec libavutil)
+    if(NOT output MATCHES "${field}")
+      message(FATAL_ERROR "版本信息缺少 ${field}：${output}")
+    endif()
+  endforeach()
+elseif(ASTRA_MODE STREQUAL "help")
+  if(NOT output MATCHES "--version" OR NOT output MATCHES "--help")
+    message(FATAL_ERROR "帮助信息不完整：${output}")
+  endif()
+else()
+  message(FATAL_ERROR "未知 CLI 测试模式")
+endif()
+if(NOT diagnostic MATCHES "startup")
+  message(FATAL_ERROR "缺少启动日志：${diagnostic}")
+endif()

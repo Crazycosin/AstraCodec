@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+astra_root="$(git rev-parse --show-toplevel)"
+cd "$astra_root"
+bash scripts/run_day1.sh debug
+bash scripts/check_quality.sh debug

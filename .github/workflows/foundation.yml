@@ -1,0 +1,44 @@
+name: foundation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  foundation:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+        preset: [debug, release, asan, tsan]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build pkg-config libavformat-dev libavcodec-dev libavutil-dev libfmt-dev ripgrep
+      - name: macOS dependencies
+        if: runner.os == 'macOS'
+        run: brew install cmake ninja pkg-config ffmpeg fmt ripgrep
+      - name: Configure, build, tests, smoke
+        run: bash scripts/run_day1.sh '${{ matrix.preset }}'
+      - name: Quality tools
+        if: matrix.preset == 'debug'
+        run: |
+          python3 -m venv .cache/quality
+          .cache/quality/bin/python -m pip install clang-format==21.1.6 clang-tidy==21.1.6
+      - name: Format and static analysis
+        if: matrix.preset == 'debug'
+        env:
+          ASTRA_CLANG_FORMAT: .cache/quality/bin/clang-format
+          ASTRA_CLANG_TIDY: .cache/quality/bin/clang-tidy
+        run: bash scripts/check_quality.sh debug
+      - name: Test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: foundation-${{ matrix.os }}-${{ matrix.preset }}
+          path: |
+            build/${{ matrix.preset }}/Testing/Temporary/
+            build/${{ matrix.preset }}/test-output/
+          if-no-files-found: warn

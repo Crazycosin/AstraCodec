@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+astra_root="$(git rev-parse --show-toplevel)"
+cd "$astra_root"
+astra_format="${ASTRA_CLANG_FORMAT:-clang-format}"
+while IFS= read -r -d '' astra_file; do
+  case "$astra_file" in core/*.cc|core/*.h|apps/*.cc|apps/*.h|tests/*.cc|tests/*.h)
+    git show ":$astra_file" | "$astra_format" --dry-run --Werror "--assume-filename=$astra_file"
+    ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)

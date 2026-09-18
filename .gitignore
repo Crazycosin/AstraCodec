@@ -22,6 +22,7 @@
 *.dylib
 *.dll
 *.so.*
+*.dylib.*
 
 
 # Fortran module files
@@ -67,3 +68,9 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+AGENTS.md
+google-cpp-code-style/
+AstraCodec_总体规划与阶段闭环实施方案_v1.0.docx
+STAGE-*.md
+SKILL.md

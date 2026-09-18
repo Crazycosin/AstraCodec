@@ -1,0 +1,20 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+ColumnLimit: 80
+IndentWidth: 2
+UseTab: Never
+DerivePointerAlignment: false
+PointerAlignment: Left
+IncludeBlocks: Regroup
+SortIncludes: CaseSensitive
+IncludeCategories:
+  - Regex: '^<[^/]+\.h>$'
+    Priority: 1
+  - Regex: '^<[^/]+>$'
+    Priority: 2
+  - Regex: '^<.*/.*>$'
+    Priority: 3
+  - Regex: '^"'
+    Priority: 4
+...
