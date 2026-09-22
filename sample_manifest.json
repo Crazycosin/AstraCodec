@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "samples": [
+    {
+      "id": "S01",
+      "filename": "s01_720p_h264.mp4",
+      "codec": "h264",
+      "container": "mp4",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "fps": {
+        "numerator": 30,
+        "denominator": 1
+      },
+      "duration_seconds": 3.0,
+      "sha256": "14cf27d368a81590a0bc59b9fe580beef0d29f9daf27eeeaf42cdad8864d9358",
+      "pixel_format": "yuv420p",
+      "video_frame_count": 90,
+      "time_base": {
+        "numerator": 1,
+        "denominator": 30000
+      },
+      "has_b_frames": false,
+      "audio": null,
+      "source": {
+        "method": "ffmpeg_lavfi",
+        "description": "FFmpeg testsrc2 生成的视频，编码参数固定，未使用外部媒体素材。",
+        "license": "GPL-3.0-only; see repository LICENSE",
+        "generation_command": "ffmpeg -hide_banner -n -f lavfi -i testsrc2=size=1280x720:rate=30:duration=3 -c:v libx264 -preset medium -crf 28 -pix_fmt yuv420p -g 30 -bf 0 -threads 1 -movflags +faststart -video_track_timescale 30000 -an samples/s01_720p_h264.mp4",
+        "tool_version": "ffmpeg 9.0.1; libx264 core 165 r3222 b35605a"
+      }
+    },
+    {
+      "id": "S02",
+      "filename": "s02_1080p_h264.mp4",
+      "codec": "h264",
+      "container": "mp4",
+      "resolution": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fps": {
+        "numerator": 30,
+        "denominator": 1
+      },
+      "duration_seconds": 5.0,
+      "sha256": "a0f07d7dc2c29a73d982b30dd6f20e0691bfe768507a22cf405aece6a592aafd",
+      "pixel_format": "yuv420p",
+      "video_frame_count": 150,
+      "time_base": {
+        "numerator": 1,
+        "denominator": 30000
+      },
+      "has_b_frames": false,
+      "audio": null,
+      "source": {
+        "method": "ffmpeg_lavfi",
+        "description": "FFmpeg testsrc2 生成的视频，编码参数固定，未使用外部媒体素材。",
+        "license": "GPL-3.0-only; see repository LICENSE",
+        "generation_command": "ffmpeg -hide_banner -n -f lavfi -i testsrc2=size=1920x1080:rate=30:duration=5 -c:v libx264 -preset medium -crf 28 -pix_fmt yuv420p -g 30 -bf 0 -threads 1 -movflags +faststart -video_track_timescale 30000 -an samples/s02_1080p_h264.mp4",
+        "tool_version": "ffmpeg 9.0.1; libx264 core 165 r3222 b35605a"
+      }
+    },
+    {
+      "id": "S03",
+      "filename": "s03_bframes_audio.mp4",
+      "codec": "h264",
+      "container": "mp4",
+      "resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "fps": {
+        "numerator": 30000,
+        "denominator": 1001
+      },
+      "duration_seconds": 5.005,
+      "sha256": "601183e88b078862a9646e69f89740a3d86a51479ebf06d9349f9bfd29b18cdd",
+      "pixel_format": "yuv420p",
+      "video_frame_count": 150,
+      "time_base": {
+        "numerator": 1,
+        "denominator": 30000
+      },
+      "has_b_frames": true,
+      "audio": {
+        "codec": "aac",
+        "sample_rate": 48000,
+        "channels": 2
+      },
+      "source": {
+        "method": "ffmpeg_lavfi",
+        "description": "FFmpeg testsrc2 生成视频，sine 生成 1000 Hz 音频，编码参数固定，未使用外部媒体素材。",
+        "license": "GPL-3.0-only; see repository LICENSE",
+        "generation_command": "ffmpeg -hide_banner -n -f lavfi -i testsrc2=size=1280x720:rate=30000/1001:duration=5.005 -f lavfi -i sine=frequency=1000:sample_rate=48000:duration=5.005 -map 0:v:0 -map 1:a:0 -c:v libx264 -preset medium -crf 28 -pix_fmt yuv420p -g 30 -bf 3 -x264-params b-adapt=0 -threads 1 -c:a aac -b:a 128k -ar 48000 -ac 2 -movflags +faststart -shortest samples/s03_bframes_audio.mp4",
+        "tool_version": "ffmpeg 9.0.1; libx264 core 165 r3222 b35605a; FFmpeg AAC encoder"
+      }
+    }
+  ]
+}

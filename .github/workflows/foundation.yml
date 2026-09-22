@@ -16,12 +16,12 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build pkg-config libavformat-dev libavcodec-dev libavutil-dev libfmt-dev ripgrep
+          sudo apt-get install -y ninja-build pkg-config ffmpeg libavformat-dev libavcodec-dev libavutil-dev libfmt-dev jq ripgrep
       - name: macOS dependencies
         if: runner.os == 'macOS'
-        run: brew install cmake ninja pkg-config ffmpeg fmt ripgrep
-      - name: Configure, build, tests, smoke
-        run: bash scripts/run_day1.sh '${{ matrix.preset }}'
+        run: brew install cmake ninja pkg-config ffmpeg fmt jq ripgrep
+      - name: Bootstrap, tests, samples, smoke
+        run: bash scripts/bootstrap.sh '${{ matrix.preset }}'
       - name: Quality tools
         if: matrix.preset == 'debug'
         run: |

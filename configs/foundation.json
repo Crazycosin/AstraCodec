@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "logger": {
+    "minimum_severity": "info",
+    "sink": "stderr",
+    "file_path": null,
+    "queue_capacity": 4096,
+    "maximum_record_bytes": 65536,
+    "maximum_file_bytes": 16777216,
+    "maximum_records_per_interval": 0,
+    "rate_interval_ms": 1000,
+    "shutdown_timeout_ms": 5000
+  },
+  "sample_root": "samples",
+  "manifest_path": "sample_manifest.json"
+}
