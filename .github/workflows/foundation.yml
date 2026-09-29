@@ -20,8 +20,27 @@ jobs:
       - name: macOS dependencies
         if: runner.os == 'macOS'
         run: brew install cmake ninja pkg-config ffmpeg fmt jq ripgrep
+      - name: Assert empty project cache
+        run: |
+          test ! -e build
+          test ! -e .cache/dependencies
       - name: Bootstrap, tests, samples, smoke
         run: bash scripts/bootstrap.sh '${{ matrix.preset }}'
+      - name: Repeat bootstrap
+        if: matrix.preset == 'debug'
+        run: bash scripts/bootstrap.sh debug
+      - name: Stage 0 outer acceptance
+        if: matrix.preset == 'debug'
+        run: |
+          mkdir -p \
+            "$GITHUB_WORKSPACE/build/stage0-outer/targets" \
+            "$GITHUB_WORKSPACE/build/stage0-outer/evidence"
+          bash scripts/run_stage0_acceptance.sh \
+            "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" \
+            "$GITHUB_SHA" \
+            "$GITHUB_WORKSPACE/build/stage0-outer/targets/astracodec-stage0-$RUNNER_OS" \
+            "$GITHUB_WORKSPACE/build/stage0-outer/evidence" \
+            "$GITHUB_REF"
       - name: Quality tools
         if: matrix.preset == 'debug'
         run: |
@@ -42,3 +61,10 @@ jobs:
             build/${{ matrix.preset }}/Testing/Temporary/
             build/${{ matrix.preset }}/test-output/
           if-no-files-found: warn
+      - name: Stage 0 outer acceptance evidence
+        if: always() && matrix.preset == 'debug'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage0-outer-${{ matrix.os }}
+          path: build/stage0-outer/evidence/
+          if-no-files-found: error

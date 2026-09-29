@@ -28,7 +28,7 @@ JSON 字段包含 `timestamp_us/severity/thread_id/job_id/node/pts/dts/error_cod
 
 Log 的默认 source_location 在调用处取得，调用者可显式传入上游操作位置；不使用 LogRecord 构造器所在头文件作为业务位置。
 
-禁止把崩溃测试当作正常线程结束、Flush 或资源释放证据。当前真实测试覆盖四个 producer、并发 Flush、五次服务生命周期、实际文件、过滤与脱敏、文件/记录容量、限速和若干非法操作；实际队列超限、磁盘写满和等待超时尚没有完整证据。
+禁止把崩溃测试当作正常线程结束、Flush 或资源释放证据。当前真实测试覆盖四个 producer、并发 Flush、实际文件、过滤与脱敏、文件/记录容量、限速和若干非法操作；通过系统线程控制触发实际队列超限及 Flush/Shutdown 等待期限，通过 `RLIMIT_FSIZE` 触发文件 sink 写入或刷新错误并校验 JSON fatal 诊断，并验证只读目录和 SIGINT 有序停止。资源检查在检测器运行时预热后记录基线，五次创建与停止后核对线程和文件描述符数量。
 
 ## VersionInfo 和依赖
 
@@ -56,4 +56,4 @@ Log 的默认 source_location 在调用处取得，调用者可显式传入上�
 
 ## 后续接入限制
 
-当前不包含外层 clone 入口、空项目缓存计时、第二平台实际结果、完整 Logger 异常/资源检查或阶段标签。新增模块继续使用现有 target、测试、错误分类、配置、资源路径和质量规则。Logger 内部队列不代表媒体 Pipeline 已实现。
+当前已提供外层 clone 入口与 Logger 专项检查；远端 CI、第二平台、Day 3 固定提交的外层复跑、正式环境基线和阶段标签仍未完成。新增模块继续使用现有 target、测试、错误分类、配置、资源路径和质量规则。Logger 内部队列不代表媒体 Pipeline 已实现。
